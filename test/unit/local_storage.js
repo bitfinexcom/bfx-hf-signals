@@ -5,7 +5,7 @@
 const { expect } = require('chai')
 const { stub, assert } = require('sinon')
 
-const LocalStorage = require('../../lib/local_storage')
+const { LocalStorage } = require('../../index')
 
 describe('LocalStorage', () => {
   const dir = 'dir'

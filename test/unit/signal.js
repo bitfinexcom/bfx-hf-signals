@@ -4,7 +4,7 @@
 
 const { expect } = require('chai')
 
-const Signal = require('../../lib/signal')
+const { Signal } = require('../../index')
 
 describe('Signal', () => {
   const id = 10

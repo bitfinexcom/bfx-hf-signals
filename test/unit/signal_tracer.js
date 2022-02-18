@@ -5,7 +5,7 @@
 const { expect } = require('chai')
 const { stub, assert } = require('sinon')
 
-const SignalTracer = require('../../lib/signal_tracer')
+const { SignalTracer } = require('../../index')
 
 describe('SignalTracer', () => {
   const isEnabled = true
