@@ -5,7 +5,7 @@
 const { expect } = require('chai')
 const { stub, assert } = require('sinon')
 
-const { SignalTracer } = require('../../index')
+const { SignalTracer, Signal } = require('../../index')
 
 describe('SignalTracer', () => {
   const isEnabled = true
@@ -28,29 +28,40 @@ describe('SignalTracer', () => {
     now.restore()
   })
 
-  it('create signal', () => {
-    const signal = tracer.createSignal('parent', null, meta)
+  it('collect', () => {
+    const signal = new Signal({ name: 'parent', meta })
+    expect(signal.id).to.be.undefined
 
-    expect(signal.id).to.eq(1)
+    const result = tracer.collect(signal)
+    expect(result).to.eq(signal)
+    expect(result.id).to.eq(1)
     expect(tracer.signals).to.have.length(1)
 
     parent = signal
   })
 
+  it('create signal', () => {
+    const signal = tracer.createSignal('child', parent)
+
+    expect(signal.id).to.eq(2)
+    expect(tracer.signals).to.have.length(2)
+  })
+
   it('close', async () => {
-    tracer.createSignal('child', parent)
+    console.log(tracer.signals)
+
     await tracer.close()
 
     expect(tracer.closed).to.be.true
     assert.calledTwice(storage.store)
-    assert.calledWithExactly(storage.store, {
+    assert.calledWithExactly(storage.store.firstCall, {
       id: 1,
       name: 'parent',
       parent: null,
       meta,
       started_at: 0
     })
-    assert.calledWithExactly(storage.store, {
+    assert.calledWithExactly(storage.store.secondCall, {
       id: 2,
       name: 'child',
       parent: 1,
