@@ -15,6 +15,7 @@ describe('OrderSignal', () => {
     cid: '123123123',
     amount: 4,
     type: 'LIMIT',
+    meta: { scope: 'a' },
     _some_key: 'some value'
   }
 
@@ -27,7 +28,8 @@ describe('OrderSignal', () => {
       lev: '3',
       cid: '123123123',
       amount: 4,
-      type: 'LIMIT'
+      type: 'LIMIT',
+      meta: { scope: 'a' }
     })
     expect(signal.parent).to.eq(parent)
     expect(signal.started_at).to.be.a('number')
